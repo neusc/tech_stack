@@ -6,10 +6,12 @@ import * as actions from '../actions'
 
 class ListItem extends Component {
   renderDescription () {
-    const { library, selectLibraryId } = this.props
-    if (library.id === selectLibraryId) {
+    const { library, expanded } = this.props
+    if (expanded) {
       return (
-        <Text>{library.description}</Text>
+        <CardSection>
+          <Text>{library.description}</Text>
+        </CardSection>
       )
     }
   }
@@ -36,8 +38,11 @@ const styles = {
   }
 }
 
-const mapStateToProps = state => {
-  return { selectLibraryId: state.selectionLibraryId }
+// 将判断渲染具体ListItem的逻辑从组件移入此函数
+// mapStateToProps的第二个参数为传入当前组件的props
+const mapStateToProps = (state, ownProps) => {
+  const expanded = state.selectionLibraryId === ownProps.library.id
+  return { expanded: expanded }
 }
 
 export default connect(mapStateToProps, actions)(ListItem)
